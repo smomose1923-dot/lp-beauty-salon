@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE SALON - 銀座プレミアム美容室</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --mid: #1E1C1A;
+    --cream: #F8F4EE;
+    --warm-white: #FDFAF5;
+    --text-muted: #8A8278;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ===== CURSOR ===== */
+  * { cursor: none; }
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,169,110,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.15s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+  /* ===== HERO ===== */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(201,169,110,0.05) 0%, transparent 40%),
+      linear-gradient(135deg, #0A0A0A 0%, #1A1510 100%);
+  }
+  .hero-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 10vw;
+    max-width: 800px;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 8vw, 100px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-subtitle {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    line-height: 2.2;
+    color: rgba(248,244,238,0.65);
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+  .hero-cta {
+    display: flex; gap: 24px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 16px 44px;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-secondary {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.6;
+    display: flex; align-items: center; gap: 12px;
+    transition: opacity 0.3s;
+  }
+  .btn-secondary:hover { opacity: 1; }
+  .btn-secondary::after {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--cream);
+    transition: width 0.3s;
+  }
+  .btn-secondary:hover::after { width: 60px; }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 9px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold); opacity: 0.7;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s ease infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  .hero-number {
+    position: absolute; right: 8vw; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(120px, 20vw, 240px);
+    font-weight: 300;
+    color: rgba(201,169,110,0.04);
+    line-height: 1;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  /* ===== CONCEPT ===== */
+  .section-concept {
+    padding: 140px 10vw;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .concept-label {
+    font-size: 10px; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .concept-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 300; line-height: 1.3;
+    margin-bottom: 32px;
+  }
+  .concept-title em { font-style: italic; color: var(--gold); }
+  .concept-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px; line-height: 2.4;
+    color: rgba(248,244,238,0.65);
+    margin-bottom: 24px;
+  }
+  .concept-visual {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  .concept-visual-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1A1510, #2C2218);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .concept-visual-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, rgba(201,169,110,0.15), transparent 60%);
+  }
+  .concept-visual-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; font-weight: 300;
+    color: rgba(201,169,110,0.15);
+    font-style: italic;
+    text-align: center; line-height: 1.2;
+    position: relative; z-index: 1;
+  }
+  .concept-visual-border {
+    position: absolute; inset: 16px;
+    border: 1px solid rgba(201,169,110,0.2);
+    pointer-events: none;
+  }
+  .concept-divider {
+    width: 48px; height: 1px;
+    background: var(--gold); margin: 40px 0;
+  }
+
+  /* ===== SERVICES ===== */
+  .section-services {
+    padding: 120px 10vw;
+    background: var(--mid);
+  }
+  .section-header {
+    text-align: center; margin-bottom: 80px;
+  }
+  .section-header .label {
+    font-size: 10px; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+  }
+  .section-header h2 em { font-style: italic; color: var(--gold); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .service-card {
+    background: var(--dark);
+    padding: 56px 40px;
+    position: relative; overflow: hidden;
+    transition: background 0.4s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { background: #161412; }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300;
+    color: rgba(201,169,110,0.15);
+    margin-bottom: 24px; line-height: 1;
+  }
+  .service-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px; margin-bottom: 16px;
+    color: var(--cream);
+  }
+  .service-desc {
+    font-size: 12px; line-height: 2;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  .service-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--gold);
+    font-style: italic;
+  }
+  .service-price span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-style: normal;
+    color: var(--text-muted); margin-left: 8px;
+  }
+
+  /* ===== FEATURES ===== */
+  .section-features {
+    padding: 140px 10vw;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 100px; align-items: center;
+  }
+  .features-visual {
+    position: relative;
+  }
+  .features-visual-main {
+    aspect-ratio: 4/5;
+    background: linear-gradient(160deg, #1E1A14, #2A221A);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .features-visual-main::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 30%, rgba(201,169,110,0.12), transparent 55%);
+  }
+  .features-visual-accent {
+    position: absolute; bottom: -30px; right: -30px;
+    width: 60%; aspect-ratio: 1;
+    background: linear-gradient(135deg, #C9A96E22, #C9A96E08);
+    border: 1px solid rgba(201,169,110,0.2);
+  }
+  .features-list {
+    list-style: none;
+  }
+  .feature-item {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    display: flex; gap: 28px; align-items: flex-start;
+  }
+  .feature-item:first-child { border-top: 1px solid rgba(201,169,110,0.1); }
+  .feature-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border: 1px solid rgba(201,169,110,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--gold);
+    margin-top: 4px;
+  }
+  .feature-content h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px; margin-bottom: 10px;
+  }
+  .feature-content p {
+    font-size: 12px; line-height: 2;
+    color: var(--text-muted);
+  }
+
+  /* ===== VOICE ===== */
+  .section-voice {
+    padding: 120px 10vw;
+    background: var(--mid);
+  }
+  .voice-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+  .voice-card {
+    background: var(--dark);
+    padding: 40px;
+    position: relative;
+  }
+  .voice-card::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    color: rgba(201,169,110,0.15);
+    position: absolute; top: 16px; left: 24px;
+    line-height: 1;
+  }
+  .voice-stars {
+    color: var(--gold); font-size: 12px;
+    margin-bottom: 20px; letter-spacing: 2px;
+  }
+  .voice-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px; line-height: 2.2;
+    color: rgba(248,244,238,0.75);
+    margin-bottom: 28px;
+    padding-top: 20px;
+  }
+  .voice-author {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+  .voice-author strong {
+    display: block; color: var(--gold);
+    font-size: 13px; margin-bottom: 4px;
+  }
+
+  /* ===== ACCESS ===== */
+  .section-access {
+    padding: 120px 10vw;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  .access-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300;
+    margin-bottom: 40px;
+  }
+  .access-table { width: 100%; }
+  .access-table tr { border-bottom: 1px solid rgba(201,169,110,0.1); }
+  .access-table td {
+    padding: 20px 0;
+    font-size: 13px; line-height: 1.8;
+  }
+  .access-table td:first-child {
+    width: 100px; color: var(--gold);
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .access-map {
+    background: var(--mid);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 360px;
+    position: relative; overflow: hidden;
+  }
+  .access-map::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.08), transparent 60%);
+  }
+  .map-placeholder {
+    text-align: center; position: relative; z-index: 1;
+  }
+  .map-placeholder p {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-top: 16px;
+  }
+  .map-icon {
+    font-size: 48px; color: var(--gold); opacity: 0.4;
+  }
+
+  /* ===== CTA BANNER ===== */
+  .section-cta {
+    padding: 120px 10vw;
+    text-align: center;
+    background: linear-gradient(135deg, #1A1510, #0A0A0A);
+    position: relative; overflow: hidden;
+  }
+  .section-cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.07), transparent 60%);
+  }
+  .cta-content { position: relative; z-index: 1; }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 300; line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px; line-height: 2;
+    color: rgba(248,244,238,0.55);
+    margin-bottom: 56px;
+  }
+  .cta-tel {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; color: var(--gold);
+    letter-spacing: 0.05em; margin-bottom: 12px;
+  }
+  .cta-tel-note {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 48px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 60px 10vw 40px;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; letter-spacing: 0.3em;
+    color: var(--gold);
+  }
+  .footer-copy {
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .section-concept, .section-features, .section-access {
+      grid-template-columns: 1fr; gap: 48px;
+    }
+    .services-grid, .voice-grid { grid-template-columns: 1fr; }
+    .hero-content { padding: 0 6vw; }
+    .hero-number { display: none; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Lumière</div>
+  <ul class="nav-links">
+    <li><a href="#concept">Concept</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#voice">Voice</a></li>
+    <li><a href="#access">Access</a></li>
+    <li><a href="#reservation">Reservation</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-number">01</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Ginza Premium Hair Salon</p>
+    <h1 class="hero-title">
+      あなたの美しさを、<br><em>最高の一日</em>へ。
+    </h1>
+    <p class="hero-subtitle">
+      銀座の中心で、時間を忘れるような至福のひとときを。<br>
+      熟練のスタイリストが、あなただけのスタイルを創り上げます。
+    </p>
+    <div class="hero-cta">
+      <a href="reservation.html" class="btn-primary">無料カウンセリング予約</a>
+      <a href="#services" class="btn-secondary">メニューを見る</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- CONCEPT -->
+<section class="section-concept" id="concept">
+  <div>
+    <p class="concept-label reveal">Our Concept</p>
+    <h2 class="concept-title reveal reveal-delay-1">
+      美しさとは、<br><em>内側から</em><br>輝くもの。
+    </h2>
+    <div class="concept-divider reveal reveal-delay-2"></div>
+    <p class="concept-text reveal reveal-delay-2">
+      LUMIÈREは、フランス語で「光」を意味します。あなたの持つ本来の美しさを引き出し、内側から輝くスタイルをご提案することが私たちの使命です。
+    </p>
+    <p class="concept-text reveal reveal-delay-3">
+      一人ひとりのライフスタイル、骨格、なりたいイメージを丁寧にヒアリング。トレンドを取り入れながらも、あなたらしさを大切にしたデザインをご提供します。
+    </p>
+  </div>
+  <div class="concept-visual reveal reveal-delay-2">
+    <div class="concept-visual-inner">
+      <div class="concept-visual-text">
+        beauté<br>lumière
+      </div>
+    </div>
+    <div class="concept-visual-border"></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section-services" id="services">
+  <div class="section-header">
+    <p class="label reveal">Services & Price</p>
+    <h2 class="reveal reveal-delay-1">厳選された<em>メニュー</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <h3 class="service-name">カット</h3>
+      <p class="service-desc">骨格診断をもとに、最も似合うシルエットへ。ダメージレスな技術で美しい仕上がりを実現します。</p>
+      <div class="service-price">¥8,800<span>〜 (税込)</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">02</div>
+      <h3 class="service-name">カラー</h3>
+      <p class="service-desc">髪と頭皮に優しいオーガニックカラーを使用。透明感のある発色と、色持ちの良さを両立します。</p>
+      <div class="service-price">¥14,300<span>〜 (税込)</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">03</div>
+      <h3 class="service-name">トリートメント</h3>
+      <p class="service-desc">サロン専売の高品質トリートメントで、髪の芯から補修。ツヤと潤いを取り戻します。</p>
+      <div class="service-price">¥6,600<span>〜 (税込)</span></div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <h3 class="service-name">パーマ</h3>
+      <p class="service-desc">デジタルパーマからコールドパーマまで対応。ダメージを最小限にしながら、理想のウェーブを。</p>
+      <div class="service-price">¥16,500<span>〜 (税込)</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">05</div>
+      <h3 class="service-name">ヘッドスパ</h3>
+      <p class="service-desc">頭皮の環境を整え、髪のベースを作るスペシャルケア。至福のリラクゼーションをお届けします。</p>
+      <div class="service-price">¥5,500<span>〜 (税込)</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">06</div>
+      <h3 class="service-name">フルコース</h3>
+      <p class="service-desc">カット＋カラー＋トリートメント＋ヘッドスパのプレミアムフルコース。特別な日に向けた最高の体験を。</p>
+      <div class="service-price">¥33,000<span>〜 (税込)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section-features" id="features">
+  <div class="features-visual reveal">
+    <div class="features-visual-main">
+      <div style="text-align:center; position:relative; z-index:1;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:64px; color:rgba(201,169,110,0.2); font-style:italic; line-height:1.2;">
+          since<br>2018
+        </div>
+        <div style="font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--text-muted); margin-top:20px;">
+          Ginza, Tokyo
+        </div>
+      </div>
+    </div>
+    <div class="features-visual-accent"></div>
+  </div>
+  <div>
+    <p class="concept-label reveal">Why Choose Us</p>
+    <h2 class="concept-title reveal reveal-delay-1">
+      選ばれ続ける<br><em>5つの理由</em>
+    </h2>
+    <ul class="features-list">
+      <li class="feature-item reveal reveal-delay-1">
+        <div class="feature-icon">I</div>
+        <div class="feature-content">
+          <h3>完全予約制・完全個室</h3>
+          <p>他のお客様を気にせず、リラックスした空間でご施術いただけます。プライベートな時間を大切に。</p>
+        </div>
+      </li>
+      <li class="feature-item reveal reveal-delay-2">
+        <div class="feature-icon">II</div>
+        <div class="feature-content">
+          <h3>経験10年以上のスタイリスト</h3>
+          <p>全スタイリスト経験10年以上。豊富な実績と技術で、必ずご満足いただけるスタイルを実現します。</p>
+        </div>
+      </li>
+      <li class="feature-item reveal reveal-delay-3">
+        <div class="feature-icon">III</div>
+        <div class="feature-content">
+          <h3>オーガニック・ダメージレス</h3>
+          <p>髪と頭皮に優しいオーガニック素材のみ使用。美しさと健康を同時に追求します。</p>
+        </div>
+      </li>
+      <li class="feature-item reveal">
+        <div class="feature-icon">IV</div>
+        <div class="feature-content">
+          <h3>丁寧なアフターフォロー</h3>
+          <p>ホームケアのアドバイスから次回のスタイル提案まで。サロンを出た後も美しい状態を保てるようサポートします。</p>
+        </div>
+      </li>
+      <li class="feature-item reveal reveal-delay-1">
+        <div class="feature-icon">V</div>
+        <div class="feature-content">
+          <h3>銀座駅徒歩2分</h3>
+          <p>銀座駅A3出口より徒歩2分。お仕事帰りやショッピングのついでにもお立ち寄りいただけます。</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section class="section-voice" id="voice">
+  <div class="section-header">
+    <p class="label reveal">Customer Voice</p>
+    <h2 class="reveal reveal-delay-1">お客様の<em>声</em></h2>
+  </div>
+  <div class="voice-grid">
+    <div class="voice-card reveal">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">カウンセリングがとても丁寧で、なりたいイメージをしっかり汲み取っていただけました。仕上がりに大満足です。</p>
+      <div class="voice-author"><strong>M.K さん</strong>30代 会社員</div>
+    </div>
+    <div class="voice-card reveal reveal-delay-1">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">個室なので周りを気にせずリラックスできます。ヘッドスパも気持ちよく、非日常の時間を過ごせました。</p>
+      <div class="voice-author"><strong>Y.S さん</strong>40代 主婦</div>
+    </div>
+    <div class="voice-card reveal reveal-delay-2">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">何度か他のサロンで失敗していたカラーも、こちらでは理想通りの仕上がりに。もう他には行けません。</p>
+      <div class="voice-author"><strong>A.T さん</strong>20代 フリーランス</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS -->
+<section class="section-access" id="access">
+  <div class="access-info reveal">
+    <h3>Access & <em style="font-style:italic; color:var(--gold);">Hours</em></h3>
+    <table class="access-table">
+      <tr>
+        <td>Address</td>
+        <td>東京都中央区銀座5-X-X<br>ルミエールビル8F</td>
+      </tr>
+      <tr>
+        <td>Hours</td>
+        <td>平日 11:00〜21:00<br>土日祝 10:00〜19:00</td>
+      </tr>
+      <tr>
+        <td>Closed</td>
+        <td>毎週月曜日・第3火曜日</td>
+      </tr>
+      <tr>
+        <td>Access</td>
+        <td>東京メトロ銀座駅 A3出口より徒歩2分</td>
+      </tr>
+      <tr>
+        <td>Tel</td>
+        <td>03-XXXX-XXXX</td>
+      </tr>
+    </table>
+  </div>
+  <div class="access-map reveal reveal-delay-1">
+    <div class="map-placeholder">
+      <div class="map-icon">📍</div>
+      <p>銀座5丁目 · 東京都中央区</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-cta" id="reservation">
+  <div class="cta-content">
+    <p class="concept-label reveal" style="margin-bottom:20px;">Reservation</p>
+    <h2 class="cta-title reveal reveal-delay-1">
+      あなたの特別な<br><em>一日</em>を始めましょう。
+    </h2>
+    <p class="cta-sub reveal reveal-delay-2">
+      初回カウンセリングは無料です。<br>
+      まずはお気軽にお電話またはWEBよりご予約ください。
+    </p>
+    <div class="cta-tel reveal reveal-delay-2">03-XXXX-XXXX</div>
+    <p class="cta-tel-note reveal reveal-delay-3">受付時間 / 平日 11:00〜20:00　土日祝 10:00〜18:00</p>
+    <a href="reservation.html" class="btn-primary reveal reveal-delay-3">WEBで予約する（24時間受付）</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">LUMIÈRE SALON</div>
+  <p class="footer-copy">© 2025 Lumière Salon. All rights reserved.</p>
+</footer>
+
+<script>
+  // カスタムカーソル
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // スクロールリビール
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
